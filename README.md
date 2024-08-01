@@ -2,31 +2,51 @@
 
 ## Set Up
 
-Before running your code, ensure you are in the virtual environment by activating it. The virtual environment isolates dependencies needed for the project, ensuring consistency and avoiding conflicts with system-wide packages or other projects. Once activated, you don't need to worry about installing dependencies globally.
+We'll use a virtual environment to encapsulate all the dependencies needed for this project. This ensures consistency and avoids conflicts with system-wide packages or other projects. Once activated, you don't need to worry about installing dependencies globally.
 
-### Activate the Virtual Environment
+### For Each Time You Run Your Code
 
-Each time you work on the project, activate the virtual environment:
-```bash
-# On Windows
-venv\Scripts\activate
+Before running your code, follow these steps to ensure everything is set up correctly:
 
-# On macOS/Linux
-source venv/bin/activate
-```
+1. **Activate the Virtual Environment**:
+    ```bash
+    # On Windows
+    venv\Scripts\activate
 
-**Installing New Packages**
-When you need to install new packages, make sure the virtual environment is activated:
-```bash
-pip install <package-name>
-```
-**Updating requirements.txt**
-After installing new packages, update the requirements.txt file to ensure all dependencies are listed:
-```bash
-pip freeze > requirements.txt
-```
+    # On macOS/Linux
+    source venv/bin/activate
+    ```
 
-Others can then install these dependencies using:
-```bash
-pip install -r requirements.txt
-```
+    Ensure the virtual environment is active. If your virtual environment is already activated, you will see `(venv)` at the beginning of each command line.
+
+2. **Install All Dependencies**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+    This installs all the necessary dependencies listed in `requirements.txt`.
+
+### If You Want to Install a New Package
+
+When you need to add a new package to the project, follow these steps:
+
+1. **Activate the Virtual Environment**:
+    ```bash
+    # On Windows
+    venv\Scripts\activate
+
+    # On macOS/Linux
+    source venv/bin/activate
+    ```
+
+2. **Install the New Package**:
+    ```bash
+    pip install <package-name>
+    ```
+
+3. **Update `requirements.txt`**:
+    ```bash
+    pip freeze > requirements.txt
+    ```
+    This updates `requirements.txt` to include the new package, ensuring others can install it using the file.
+
+By following these instructions, we can ensure a consistent and conflict-free development environment for our project.
