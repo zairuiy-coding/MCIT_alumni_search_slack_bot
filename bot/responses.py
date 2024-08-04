@@ -1,7 +1,6 @@
-import openai
+from openai import OpenAI
+import os
 from config import Config
-
-openai.api_key = Config.OPENAI_API_KEY
 
 def generate_response(results):
     """
@@ -13,11 +12,31 @@ def generate_response(results):
     Returns:
         str: A generated response string.
     """
+    # Initialize the OpenAI client
+    client = OpenAI(api_key=Config.OPENAI_API_KEY)
+
+    # Specify the model
+    model = "gpt-3.5-turbo"  # You can change this to "gpt-4", but keep the cost in mind since it can get at least 20 times more expensive compared to gpt-3.5
+
+    # The results for analysis
+    # Joins results (which is an array of tuples) into a comma separated string
+    # e.g. [("Allen", "Amazon"), ("Bob", "Facebook"), ("Carol, "Google")]
+    # to
+    # "Allen from Amazon, Bob from Facebook, Carol from Google"
     names = ", ".join([f"{r[0]} from {r[1]}" for r in results])
-    prompt = f"Generate a human-readable response listing the following people and their companies: {names}"
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=100
+
+    # Preparing messages for the model
+    messages = [
+        {"role": "system", "content": "You are an search engine"},
+        {"role": "user", "content": f"Generate a human-readable response listing the following people and their companies: {names}"}
+    ]
+
+    # Sending the request to the model
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages,
+        temperature=0
     )
-    return response.choices[0].text.strip()
+
+    # Extracting and printing the response
+    return response.choices[0].message.content.strip()
