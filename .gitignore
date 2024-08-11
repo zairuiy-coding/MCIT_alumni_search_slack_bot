@@ -16,3 +16,4 @@ env/
 
 # Ignore environment variable files
 .env
+*.pyc
