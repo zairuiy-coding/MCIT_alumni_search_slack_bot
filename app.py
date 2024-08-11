@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, jsonify
 from slack_sdk import WebClient
-from bot.commands import handle_slack_command
+from bot.commands import handle_search_alumni
 from config import Config
 from slackeventsapi import SlackEventAdapter
 
@@ -37,15 +37,15 @@ def message(payload):
     if user_id != BOT_ID:
         slack_client.chat_postMessage(channel=channel_id, text=text)
 
-@app.route('/slack/commands', methods=['POST'])
-def slack_commands():
+@app.route('/search-alumni', methods=['POST'])
+async def search_alumni():
     """
     Endpoint to handle incoming Slack commands.
 
     Returns:
         Response: JSON response acknowledging the command.
     """
-    return handle_slack_command(request, slack_client)
+    return await handle_search_alumni(request, slack_client)
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)

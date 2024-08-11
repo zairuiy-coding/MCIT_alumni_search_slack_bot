@@ -38,11 +38,11 @@ def process_data_with_openai(user_query, data):
                                     "- ...\n"}
     ]
 
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model=model,
         messages=messages,
         temperature=0,
         max_tokens=1024
     )
-    
-    return response.choices[0].message['content'].strip()
+
+    return response.choices[0].message.content.strip()

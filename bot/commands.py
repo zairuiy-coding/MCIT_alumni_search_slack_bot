@@ -1,15 +1,11 @@
 from flask import request, jsonify
 from slack_sdk import WebClient
+
 from config import Config
-from bot.nlp import interpret_user_query
-from bot.responses import generate_response
-from db.database import fetch_alumni_info
 from bot.nlp import process_data_with_openai
 from db.database import fetch_all_data
 
-slack_client = WebClient(token=Config.SLACK_BOT_TOKEN)
-
-def handle_slack_command(request):
+async def handle_search_alumni(request, slack_client):
     """
     Handles Slack slash commands by processing the request and responding with relevant information.
 
@@ -22,6 +18,9 @@ def handle_slack_command(request):
     data = request.form
     command_text = data.get('text')
 
+    # Acknowledge receipt of the command quickly to avoid timeouts
+    slack_client.chat_postMessage(channel=data.get('channel_id'), text="Processing your request...")
+
     # step 1: Pre-Fetch All Data from the Database
     all_records = fetch_all_data()
 
@@ -31,4 +30,4 @@ def handle_slack_command(request):
     # Step 3: Generate and Post the Final Response
     slack_client.chat_postMessage(channel=data.get('channel_id'), text=api_response)
     
-    return jsonify(response_type='ephemeral', text="Processing your request...")
+    return jsonify(response_type='in_channel', text="Your request has been processed.")
