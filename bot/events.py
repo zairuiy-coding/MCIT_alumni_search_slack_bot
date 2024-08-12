@@ -21,7 +21,7 @@ def handle_message_event(event, bot_id, slack_client):
     logging.info(f"User text: {user_text}")
 
     prompt_text = '''
-        Please use the `/search-alumni` slash command to search for your query
+    Please use the `/search-alumni` command followed by your query to find relevant alumni information.
     '''
     
     # Send the prompt text if the message isn't from the bot, is not a slash command, and user_id is not None

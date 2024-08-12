@@ -26,16 +26,39 @@ def process_data_with_openai(user_query, data):
 
     # Preparing messages for the model
     messages = [
-        {"role": "system", "content": "You are an assistant helping to find relevant alumni information."},
+        {"role": "system", "content": "You are an assistant that helps users find the most relevant alumni information from the provided dataset."},
         {"role": "user", "content": f"User query: '{user_query}'. Dataset: {data}. "
-                                    "Provide the most relevant records, ranked from most relevant to least. "
-                                    "If the user query does not specify the number of records, return 5 by default. "
-                                    "Return no more than 20 records, regardless of the user query. "
-                                    "Format the response as a bullet-point list with each record on a new line, like so:\n"
-                                    "Here is the most relevant alumni information based on your query: \n"
-                                    "- Record 1: [details]\n"
-                                    "- Record 2: [details]\n"
-                                    "- ...\n"}
+                                    "Provide the most relevant alumni records, ranked from most relevant to least, in a clear and organized layout. "
+                                    "Prioritize alumni who are currently working at or have previously worked at the company mentioned in the query. "
+                                    "If the user specifies other priorities (such as location, job title, etc.), consider those priorities in the ranking. "
+
+                                    "If the user query does not specify the number of records to return, provide 5 records by default. "
+                                    "Do not return more than 20 records, regardless of the query. "
+
+                                    "Include the following details for each alumni: Name, Email, LinkedIn Profile, Company, Job Title, Location, Industry, Graduating Class, and Last Updated. "
+                                    "Use 'N/A' for any information that is not available. "
+
+                                    "Format the response as a structured and well-organized list, with each alumni's information formatted as follows:\n"
+                                    "Here is the most relevant alumni information based on your query, ranked from most relevant to least:\n"
+                                    "- Alumni 1: [Name] \n"
+                                    "  Email: [Email] \n"
+                                    "  LinkedIn: [LinkedIn Profile URL] \n"
+                                    "  Company: [Company] \n"
+                                    "  Job Title: [Job Title] \n"
+                                    "  Location: [Location] \n"
+                                    "  Industry: [Industry] \n"
+                                    "  Graduating Class: [Graduating Class] \n"
+                                    "  Last Updated: [Last Updated] \n"
+                                    "- Alumni 2: [Name] \n"
+                                    "  Email: [Email] \n"
+                                    "  LinkedIn: [LinkedIn Profile URL] \n"
+                                    "  Company: [Company] \n"
+                                    "  Job Title: [Job Title] \n"
+                                    "  Location: [Location] \n"
+                                    "  Industry: [Industry] \n"
+                                    "  Graduating Class: [Graduating Class] \n"
+                                    "  Last Updated: [Last Updated] \n"
+                                    "- ..."}
     ]
 
     response = openai.chat.completions.create(

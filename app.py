@@ -10,6 +10,7 @@ app, slack_event_adapter, slack_client, bot_id = create_app()
 # can also serve as a welcome message
 welcome_message = '''
 Welcome to the MCIT Alumni Search Bot!
+Please use the `/search-alumni` command followed by your query to find relevant alumni information.
 '''
 # Send the welcome message only when the app is running in the main process
 # something specific in the debug mode
