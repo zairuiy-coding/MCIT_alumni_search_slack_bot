@@ -10,6 +10,23 @@ def connect_db():
     """
     return psycopg2.connect(Config.DATABASE_URL)
 
+def fetch_all_data():
+    """
+    Fetch All data from the PostgreSQL database.
+
+    Returns:
+        list: A list of tuples containing all alumni information.
+    """
+    conn = connect_db()
+    cur = conn.cursor()
+    query = "SELECT * FROM example_table"
+    cur.execute(query)
+    results = cur.fetchall()
+    cur.close()
+    conn.close()
+    return results
+
+
 def fetch_alumni_info(role, limit=10):
     """
     Fetches alumni information from the database based on the specified role and limit.
