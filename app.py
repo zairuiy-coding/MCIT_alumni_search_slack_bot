@@ -1,12 +1,8 @@
 import os
-import logging
-from flask import Flask, request, jsonify
-from slack_sdk import WebClient
+from flask import request, jsonify
 from bot import create_app
-from bot.commands import handle_search_alumni
+from bot.commands import process_command
 from bot.events import handle_message_event
-from config import Config
-from slackeventsapi import SlackEventAdapter
 
 app, slack_event_adapter, slack_client, bot_id = create_app()
 
@@ -41,7 +37,9 @@ def search_alumni():
     Returns:
         Response: JSON response acknowledging the command.
     """
-    return handle_search_alumni(request, slack_client)
+    data = request.form
+    process_command(data, slack_client)  # Async processing in `process_command`
+    return jsonify(response_type='in_channel', text="Your request is being processed...")
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
