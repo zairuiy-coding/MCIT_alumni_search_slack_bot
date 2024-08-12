@@ -19,9 +19,6 @@ def handle_search_alumni(command_text, channel_id, slack_client):
     if not command_text:
         command_text = "No specific query provided."
 
-    # Acknowledge receipt of the command quickly to avoid timeouts
-    slack_client.chat_postMessage(channel=channel_id, text=f"Searching for your request: {command_text}")
-
     # step 1: Pre-Fetch All Data from the Database
     all_records = fetch_all_data()
 

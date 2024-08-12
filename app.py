@@ -38,10 +38,7 @@ def process_command(data, slack_client):
     # Extract command text and channel ID
     command_text = data.get('text')
     channel_id = data.get('channel_id')
-    
-    # Send acknowledgment
-    slack_client.chat_postMessage(channel=channel_id, text="Your request is being processed...")
-    
+
     # Handle the command
     handle_search_alumni(command_text, channel_id, slack_client)
 
@@ -58,7 +55,7 @@ def search_alumni():
     data = request.form
     # Use threading to process the command asynchronously
     threading.Thread(target=process_command, args=(data, slack_client)).start()
-    return jsonify(response_type='in_channel', text="Your request is being processed.")
+    return jsonify(response_type='in_channel', text="Your request is being processed...")
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
