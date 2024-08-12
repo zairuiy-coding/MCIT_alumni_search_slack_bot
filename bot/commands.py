@@ -5,7 +5,7 @@ from config import Config
 from bot.nlp import process_data_with_openai
 from db.database import fetch_all_data
 
-def handle_search_alumni(request, slack_client):
+def handle_search_alumni(command_text, channel_id, slack_client):
     """
     Handles Slack slash commands by processing the request and responding with relevant information.
 
@@ -15,15 +15,12 @@ def handle_search_alumni(request, slack_client):
     Returns:
         Response: JSON response indicating the command is being processed.
     """
-    data = request.form
-    command_text = data.get('text')
-
     # Ensure command_text is not None or empty
     if not command_text:
         command_text = "No specific query provided."
 
     # Acknowledge receipt of the command quickly to avoid timeouts
-    slack_client.chat_postMessage(channel=data.get('channel_id'), text=f"Searching for your request: {command_text}")
+    slack_client.chat_postMessage(channel=channel_id, text=f"Searching for your request: {command_text}")
 
     # step 1: Pre-Fetch All Data from the Database
     all_records = fetch_all_data()
@@ -36,6 +33,6 @@ def handle_search_alumni(request, slack_client):
         api_response = "No relevant alumni information found based on your query."
     
     # Step 3: Generate and Post the Final Response
-    slack_client.chat_postMessage(channel=data.get('channel_id'), text=api_response)
+    slack_client.chat_postMessage(channel=channel_id, text=api_response)
     
-    return jsonify(response_type='in_channel', text="Your request has been processed.")
+    # return jsonify(response_type='in_channel', text="Your request has been processed.")

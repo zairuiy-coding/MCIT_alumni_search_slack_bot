@@ -1,5 +1,7 @@
 import os
 import logging
+from threading import Thread
+import threading
 from flask import Flask, request, jsonify
 from slack_sdk import WebClient
 from bot import create_app
@@ -32,6 +34,18 @@ def message(payload):
     event = payload.get('event', {})
     handle_message_event(event, bot_id, slack_client)
 
+def process_command(data, slack_client):
+    # Extract command text and channel ID
+    command_text = data.get('text')
+    channel_id = data.get('channel_id')
+    
+    # Send acknowledgment
+    slack_client.chat_postMessage(channel=channel_id, text="Your request is being processed...")
+    
+    # Handle the command
+    handle_search_alumni(command_text, channel_id, slack_client)
+
+
     
 @app.route('/search-alumni', methods=['POST'])
 def search_alumni():
@@ -41,7 +55,10 @@ def search_alumni():
     Returns:
         Response: JSON response acknowledging the command.
     """
-    return handle_search_alumni(request, slack_client)
+    data = request.form
+    # Use threading to process the command asynchronously
+    threading.Thread(target=process_command, args=(data, slack_client)).start()
+    return jsonify(response_type='in_channel', text="Your request is being processed.")
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
