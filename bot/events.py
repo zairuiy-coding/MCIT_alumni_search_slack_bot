@@ -23,7 +23,7 @@ def handle_message_event(event, bot_id, slack_client):
     prompt_text = '''
         Please use the `/search-alumni` slash command to search for your query
     '''
-
-    # Send the prompt text if the message isn't from the bot
-    if user_id != bot_id:
+    
+    # Send the prompt text if the message isn't from the bot, is not a slash command, and user_id is not None
+    if user_id is not None and user_id != bot_id and (user_text is not None and not user_text.startswith('/')):
         slack_client.chat_postMessage(channel=channel_id, text=prompt_text)
