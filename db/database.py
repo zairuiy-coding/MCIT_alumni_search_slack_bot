@@ -19,7 +19,7 @@ def fetch_all_data():
     """
     conn = connect_db()
     cur = conn.cursor()
-    query = "SELECT * FROM example_table"
+    query = "SELECT * FROM alumni_table"
     cur.execute(query)
     results = cur.fetchall()
     cur.close()
