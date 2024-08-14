@@ -6,16 +6,21 @@ from bot.events import handle_message_event
 
 app, slack_event_adapter, slack_client, bot_id = create_app()
 
-# for debugging purpose
-# can also serve as a welcome message
-welcome_message = '''
-Welcome to the MCIT Alumni Search Bot!
-Please use the `/search-alumni` command followed by your query to find relevant alumni information.
-'''
-# Send the welcome message only when the app is running in the main process
-# something specific in the debug mode
-if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
-    slack_client.chat_postMessage(channel='#test', text=welcome_message)
+@slack_event_adapter.on('app_home_opened')
+def app_home_opened(event_data):
+    """
+    Handles the event when the bot is added to the workspace.
+    Sends a welcome message to the user who added the bot.
+    """
+    event = event_data.get('event', {})
+    user_id = event.get('user')
+
+    welcome_message = '''
+    Welcome to the MCIT Alumni Search Bot!
+    Please use the `/search-alumni` command followed by your query to find relevant alumni information.
+    '''
+    slack_client.chat_postMessage(channel=user_id, text=welcome_message)
+
 
 
 @slack_event_adapter.on('message')
