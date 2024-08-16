@@ -65,3 +65,6 @@ def create_app():
     celery = make_celery(app)
 
     return app, slack_event_adapter, slack_client, bot_id, celery
+
+# Expose the celery instance at the module level
+celery = make_celery(create_app()[0])
