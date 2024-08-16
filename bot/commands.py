@@ -1,3 +1,4 @@
+import random
 import threading
 
 from bot.nlp import process_data_with_openai
@@ -27,6 +28,8 @@ def handle_search_alumni(data, slack_client):
     try:
         # step 1: Pre-Fetch All Data from the Database
         all_records = fetch_all_data()
+        random.shuffle(all_records)
+        # print("all_records: ", all_records)
 
         # Step 2: fetch data and user qeury to OpenAI API
         api_response = process_data_with_openai(command_text, all_records)

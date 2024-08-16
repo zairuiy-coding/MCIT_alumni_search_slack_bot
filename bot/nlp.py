@@ -28,20 +28,24 @@ def process_data_with_openai(user_query, data):
     messages = [
         {"role": "system", "content": "You are an assistant that helps users find the most relevant alumni information from the provided dataset."},
         {"role": "user", "content": f"User query: '{user_query}'. Dataset: {data}. "
+                                    
+                                    "prioritize alumni with most updated information."
 
-                                    "prioritize most updated alumni"
+                                    "If the user put some questions unrelated to our data, send a reminder and tell them the data columns we have instead, and ask them to reprompt. Don't respond any alumni information in this case."
+                                    "If the dataset does not explicitly contain information being asked, do not return results."
+                                    "If the user question has some unknown attributes, then send a reminder that we don't have that attribute in the dataset, and ask them to reprompt. Don't respond any alumni information in this case. Examples of unknown attributes for this dataset include gender, ethnicity, age, nationality. Don't infer ethnicity/nationality from alumni's name or location."
 
-                                    "Prioritize alumni who are currently working at or have previously worked at the company mentioned in the query. "
-                                    "If the user specifies other priorities (such as location, job title, etc.), consider those priorities in the ranking. "
+                                    "Provide responses based on the available data and not on inferences or assumptions. For instance, don’t assume someone with a Chinese name is from China. Also, don't assume someone with a US location is from the US."
 
-                                    "If the user query does not specify the number of alumni to return, provide 5 alumni by default. "
-                                    "Do not return more than 20 alumni, regardless of the query. "
+                                    "If the user query does not specify the number of alumni to return, provide 5 alumni by default, and provide a message at the end saying that 'note that we provide 5 alumni by default if a number is not specified'. However, do not include this message if you return less than 5 alumni. "
+                                    "If the user specified a number, but there aren't enough alumni to return, include a sentence letting the user know that these are all the avalible alumni we can find."
+                                    "If the user specify more than 8 alumni to return, do not return more than 8 alumni, and provide a message at the end saying that note that we provide 8 alumni at most per query "
 
                                     "Include the following details for each alumni: Name, Email, LinkedIn Profile, Company, Job Title, Location, Industry, Graduating Class, and Last Updated. "
                                     "Use 'N/A' for any information that is not available. "
 
-                                    "Format the response as a structured and well-organized list, with each alumni's information formatted as follows:\n"
-                                    "Here is the alumni information based on your query, ranked from most relevant to least:\n"
+                                    "If the user is asking a question that can be answered and needs specific alumni information, format the response as a structured and well-organized list, with each alumni's information formatted as follows:\n"
+                                    f"Here is the alumni information based on your query: {user_query}: \n"
                                     "- Alumni 1: [Name] \n"
                                     "  Email: [Email] \n"
                                     "  LinkedIn: [LinkedIn Profile URL] \n"
@@ -53,14 +57,16 @@ def process_data_with_openai(user_query, data):
                                     "  Last Updated: [Last Updated] \n"
                                     "- Alumni 2: [Name] \n"
                                     "  Email: [Email] \n"
-                                    "  LinkedIn: [LinkedIn Profile URL] \n"
+                                    "  LinkedIn: [LinkedIn URL] \n"
                                     "  Company: [Company] \n"
                                     "  Job Title: [Job Title] \n"
                                     "  Location: [Location] \n"
                                     "  Industry: [Industry] \n"
                                     "  Graduating Class: [Graduating Class] \n"
                                     "  Last Updated: [Last Updated] \n"
-                                    "- ..."}
+                                    "- ..."
+                                    "However, if the user is asking a question that can be answered but does not need specific alumni information, simply provide answer to the user's question without providing alumni info in the above format. "
+                                    }
     ]
 
     response = openai.chat.completions.create(
