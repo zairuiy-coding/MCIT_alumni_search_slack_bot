@@ -17,3 +17,5 @@ env/
 # Ignore environment variable files
 .env
 *.pyc
+*.pyc
+/bot/__pycache__
