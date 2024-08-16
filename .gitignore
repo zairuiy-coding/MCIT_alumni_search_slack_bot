@@ -21,3 +21,4 @@ env/
 /bot/__pycache__
 /__pycache__
 *.pyc
+*.rdb
