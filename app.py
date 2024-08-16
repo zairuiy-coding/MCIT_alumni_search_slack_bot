@@ -1,5 +1,6 @@
 
-from flask import request, jsonify
+import logging
+from flask import request, jsonify, session
 from bot import create_app
 from bot.commands import handle_search_alumni
 from bot.events import handle_message_event
@@ -15,11 +16,17 @@ def app_home_opened(event_data):
     event = event_data.get('event', {})
     user_id = event.get('user')
 
-    welcome_message = '''
-    Welcome to the MCIT Alumni Search Bot!
-    Please use the `/search-alumni` command followed by your query to find relevant alumni information.
-    '''
-    slack_client.chat_postMessage(channel=user_id, text=welcome_message)
+    if not session.get(f'welcomed_{user_id}'):
+        welcome_message = '''
+        Welcome to the MCIT Alumni Search Bot!
+        Please use the `/search-alumni` command followed by your query to find relevant alumni information.
+        '''
+        slack_client.chat_postMessage(channel=user_id, text=welcome_message)
+        
+        # Mark the user as welcomed in the session
+        session[f'welcomed_{user_id}'] = True
+
+    logging.info(f"App home opened by user: {user_id}")
 
 
 @slack_event_adapter.on('message')

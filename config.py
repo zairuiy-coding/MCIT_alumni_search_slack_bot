@@ -24,6 +24,17 @@ class Config:
     CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
     CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
 
+    # Flask-Session Configuration
+    SESSION_TYPE = 'redis'
+    SESSION_PERMANENT = False
+    SESSION_USE_SIGNER = True
+    SESSION_REDIS = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+    SESSION_KEY_PREFIX = 'slack_session:'
+
+    # Secret Key
+    SECRET_KEY = os.getenv('SECRET_KEY', os.urandom(24))
+
+
     # Ensure critical environment variables are loaded
     if not SLACK_BOT_TOKEN:
         raise ValueError("SLACK_BOT_TOKEN environment variable is not set.")
