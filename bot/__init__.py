@@ -20,7 +20,8 @@ def make_celery(app):
         app.import_name,
         backend=app.config['CELERY_RESULT_BACKEND'],
         broker=app.config['CELERY_BROKER_URL'],
-        task_cls=FlaskTask
+        task_cls=FlaskTask,
+        include=['bot.commands']    # Ensure the task module is included
     )
     celery_app.set_default()
     app.extensions['celery'] = celery_app
