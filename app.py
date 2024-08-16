@@ -1,10 +1,10 @@
-import os
+
 from flask import request, jsonify
 from bot import create_app
-from bot.commands import process_command
+from bot.commands import handle_search_alumni
 from bot.events import handle_message_event
 
-app, slack_event_adapter, slack_client, bot_id = create_app()
+app, slack_event_adapter, slack_client, bot_id, celery = create_app()
 
 @slack_event_adapter.on('app_home_opened')
 def app_home_opened(event_data):
@@ -20,7 +20,6 @@ def app_home_opened(event_data):
     Please use the `/search-alumni` command followed by your query to find relevant alumni information.
     '''
     slack_client.chat_postMessage(channel=user_id, text=welcome_message)
-
 
 
 @slack_event_adapter.on('message')
@@ -44,7 +43,7 @@ def search_alumni():
         Response: JSON response acknowledging the command.
     """
     data = request.form
-    process_command(data, slack_client)  # Async processing in `process_command`
+    handle_search_alumni.delay(data)  # Async processing with Celery
     return jsonify(response_type='in_channel', text="Your request is being processed...")
 
 if __name__ == '__main__':

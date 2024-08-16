@@ -103,3 +103,51 @@ To ensure a smooth and efficient workflow, please follow these Git guidelines wh
 
 8. **Create a Pull Request**:
     After pushing your changes, create a pull request on the repository's GitHub page to merge your changes into the main branch.
+
+## Running the Flask App with Celery
+
+### 1. Install Required Dependencies
+
+Ensure you have installed all required dependencies by running:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Start the Redis Server
+
+Make sure that Redis is running on your local machine. You can start the Redis server with:
+
+```bash
+redis-server
+```
+
+### 3. Start the Celery Worker
+
+In a new terminal, navigate to your project directory and start the Celery worker:
+
+```bash
+celery -A bot.celery worker --loglevel=info
+```
+
+- `-A bot.celery`: This specifies that Celery should be initialized using the Celery instance defined in the `bot/__init__.py`.
+
+- `--loglevel=info`: This sets the logging level to `info`, which provides a good balance of useful output and avoiding too much verbosity.
+
+### 4. Start the Flask Application
+
+In another terminal window, start your Flask app:
+
+```bash
+python app.py
+```
+
+Your app will now be running at http://localhost:3000 and should be able to handle requests, including those routed through Celery.
+
+### 5. Stopping the Services
+
+When you're done testing or using the app:
+
+- Stop the Flask application with Ctrl + C.
+- Stop the Celery worker by finding its process (`ps aux | grep 'celery'`) and killing it (`kill -9 <pid>`).
+- Optionally, stop the Redis server with Ctrl + C in the terminal where it’s running

@@ -9,11 +9,20 @@ class Config:
         SLACK_BOT_TOKEN (str): Token for authenticating the Slack bot.
         DATABASE_URL (str): URL for connecting to the PostgreSQL database.
     """
-
+    
+    # open ai
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
+
+    # backend database
     DATABASE_URL = os.getenv("DATABASE_URL")
+    
+    # slack config
+    SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
     SIGNING_SECRET = os.getenv("SLACK_SIGNING_SECRET")
+
+    # Celery Configuration
+    CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+    CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
 
     # Ensure critical environment variables are loaded
     if not SLACK_BOT_TOKEN:

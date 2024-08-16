@@ -1,16 +1,13 @@
 import random
-import threading
+
+from celery import shared_task
+from flask import current_app
 
 from bot.nlp import process_data_with_openai
 from db.database import fetch_all_data
 
-def process_command(data, slack_client):
-    """
-    Initiates a thread to process the Slack command.
-    """
-    threading.Thread(target=handle_search_alumni, args=(data, slack_client), name="SlackCommandThread").start()
-
-def handle_search_alumni(data, slack_client):
+@shared_task(bind=True)
+def handle_search_alumni(self, data):
     """ 
     Handles Slack slash commands by processing the request and responding with relevant information.
 
@@ -39,7 +36,13 @@ def handle_search_alumni(data, slack_client):
             api_response = "No relevant alumni information found based on your query."
         
         # Step 3: Generate and Post the Final Response
-        slack_client.chat_postMessage(channel=channel_id, text=api_response)
+        # Accessing the Slack client within the Flask app context
+        with current_app.app_context():
+            slack_client = current_app.extensions['slack_client']
+            slack_client.chat_postMessage(channel=channel_id, text=api_response)
+    
     
     except Exception as e:
-        slack_client.chat_postMessage(channel=channel_id, text=f"An error occurred: {str(e)}")
+        with current_app.app_context():
+            slack_client = current_app.extensions['slack_client']
+            slack_client.chat_postMessage(channel=channel_id, text=f"An error occurred: {str(e)}")
