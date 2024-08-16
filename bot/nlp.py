@@ -45,10 +45,11 @@ def process_data_with_openai(user_query, data):
                                     "Use 'N/A' for any information that is not available. "
 
                                     "If the user is asking a question that can be answered and needs specific alumni information, format the response as a structured and well-organized list, with each alumni's information formatted as follows:\n"
+                                    "Pay special attention to displaying the LinkedIn URL as plain text, not as a clickable link, and avoid displaying the URL twice.\n"
                                     f"Here is the alumni information based on your query: {user_query}: \n"
                                     "- Alumni 1: [Name] \n"
                                     "  Email: [Email] \n"
-                                    "  LinkedIn: [LinkedIn Profile URL] \n"
+                                    "  LinkedIn: [LinkedIn URL] \n"
                                     "  Company: [Company] \n"
                                     "  Job Title: [Job Title] \n"
                                     "  Location: [Location] \n"
