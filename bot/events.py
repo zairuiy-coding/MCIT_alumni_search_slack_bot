@@ -18,7 +18,7 @@ def handle_message_event(event, bot_id, slack_client):
 
     # Log the user ID
     logging.info(f"User ID: {user_id}")
-    logging.info(f"User text: {user_text}")
+    # logging.info(f"User text: {user_text}")
 
     prompt_text = '''
     Please use the `/search-alumni` command followed by your query to find relevant alumni information.

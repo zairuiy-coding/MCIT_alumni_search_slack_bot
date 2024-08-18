@@ -5,6 +5,9 @@ from flask import Flask
 from slack_sdk import WebClient
 from slackeventsapi import SlackEventAdapter
 
+from redis import Redis
+from flask_session import Session
+
 from config import Config
 
 def make_celery(app):
@@ -41,17 +44,26 @@ def create_app():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
     # Load config
-    app.config.from_mapping(
-        CELERY_BROKER_URL="redis://localhost:6379/0",
-        CELERY_RESULT_BACKEND="redis://localhost:6379/0",
-        CELERY_TASK_IGNORE_RESULT=False,
-    )
+    app.config.from_object(Config)
+
+    # Initialize session with Redis
+    app.config['SESSION_TYPE'] = 'redis'
+    app.config['SESSION_REDIS'] = Redis.from_url(Config.REDIS_URL)
+    app.config['SESSION_PERMANENT'] = False
+    # app.config['SESSION_USE_SIGNER'] = True
+    app.config['SESSION_KEY_PREFIX'] = 'slack_session:'
+    # app.config['SESSION_COOKIE_NAME'] = 'slack_session_cookie'
+    # app.config['SECRET_KEY'] = Config.SECRET_KEY
+    Session(app)
+    logging.info(f"Connected to Redis at {Config.REDIS_URL}")
 
     # slack setup
     slack_event_adapter = SlackEventAdapter(
         Config.SIGNING_SECRET, '/slack/events', app)
-
+    
     slack_client = WebClient(token=Config.SLACK_BOT_TOKEN)
+
+    logging.info("Slack client and event adapter initialized")
 
     # get the id of our bot
     bot_id = slack_client.api_call("auth.test")['user_id']
