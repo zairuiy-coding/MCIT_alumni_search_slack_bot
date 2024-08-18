@@ -2,7 +2,10 @@
 
 ## 📝 Overview
 
-The MCIT Alumni Search Slack Bot is a robust tool designed to help MCIT students easily search for and retrieve information about alumni from the MCIT program via Slack commands. Leveraging the power of the Slack API for seamless integration, OpenAI for sophisticated natural language processing, and PostgreSQL for reliable data storage, this bot ensures efficient and concurrent handling of user queries. Additionally, it utilizes Redis for session management to provide a smooth and consistent user experience, preventing duplicate messages and managing tasks asynchronously with Celery.
+The MCIT Alumni Search Slack Bot is a powerful and handy tool that enables MCIT students to quickly and efficiently search for alumni information through Slack commands.
+
+This bot integrates seamlessly with Slack using its API, employs OpenAI for advanced natural language processing, and relies on PostgreSQL for secure data storage. It also leverages Redis for session management to ensure smooth, consistent user experiences, and uses Celery for asynchronous task processing, allowing for efficient, concurrent handling of user queries.
+
 ## ✨ Key Features
 
 -   **Slack Integration**: Seamlessly interacts with users in Slack through commands and message events.
