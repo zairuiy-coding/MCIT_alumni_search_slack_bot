@@ -20,9 +20,15 @@ class Config:
     SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
     SIGNING_SECRET = os.getenv("SLACK_SIGNING_SECRET")
 
+    # Redis
+    REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+    REDIS_EXPIRATION_TIME = 3600  # 1 hour in seconds
+
     # Celery Configuration
     CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
     CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+
+
 
     # Ensure critical environment variables are loaded
     if not SLACK_BOT_TOKEN:
