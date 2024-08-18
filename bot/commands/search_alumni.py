@@ -41,7 +41,6 @@ def handle_search_alumni(self, data):
             slack_client = current_app.extensions['slack_client']
             slack_client.chat_postMessage(channel=channel_id, text=api_response)
     
-    
     except Exception as e:
         with current_app.app_context():
             slack_client = current_app.extensions['slack_client']
