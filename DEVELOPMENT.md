@@ -60,6 +60,8 @@ Ensure that PostgreSQL is installed and running on your local machine. You shoul
 -   Create the database as specified in  `DATABASE_URL`.
 -   Migrate any necessary schema or data to this database.
 
+For more detailed instruction on migrating data into the database, please check our [Database Documentation](https://docs.google.com/document/d/1uKjry16lbN22__4PVICnrkDwjMbquW5R_q-iX836c2o/edit).
+
 
 ### 6. Start Redis
 
@@ -104,24 +106,68 @@ If you find that multiple Redis instances are running and you wish to stop a spe
 	```
 	Make sure to use the kill commands with caution, as terminating the wrong process might affect other services on your machine.
 
-### 7. Running the Application
+### 7. Running and Testing Locally
 
-To run the application locally, start the following services:
+To test the app locally, you'll need to expose your local server to the internet using a tool like **ngrok**. This is necessary because Slack's events API requires a public URL to send events to your bot.
 
-#### 7.1 Start the Flask App
-```bash
-python app.py
-```
-#### 7.2 Start the Celery Worker
+#### 7.1 Set Up Ngrok
+
+-   Install ngrok from the  [official website](https://ngrok.com/).
+-   Start ngrok on the port your Flask app is running on (usually  `5000`):
+    
+    ```bash
+    ngrok http 5000
+    ```
+#### 7.2 Configure Slack
+
+-   Go to your Slack app settings and update the  **Request URL**  for the Slack events and commands to the ngrok URL you copied, followed by the appropriate endpoint (e.g.,  `https://your-ngrok-url.ngrok.io/slack/events`).
+
+#### 7.3 Run the Flask App
+
+-   Start your Flask app locally:
+	```bash
+	python  app.py
+	```
+
+#### 7.4 Start the Celery Worker
 
 In a new terminal window:
+
 ``` bash
-celery -A bot.celery worker --loglevel=info
+celery  -A  bot.celery  worker  --loglevel=info
 ```
 
-### 8. Git Workflow
+### 8. Deploying Code Updates to Heroku
 
-#### 8.1 Working on a New Feature or Bugfix
+Whenever you have updates to your code that you'd like to deploy to Heroku, follow these steps:
+
+#### 8.1 Commit Your Changes
+
+-   Ensure that all your changes are committed to your local Git repository:
+    
+    ```bash
+    git add .
+	git commit -m "Your commit message"
+	```
+#### 8.2 Push to Heroku
+
+-   Push your changes to the Heroku remote repository:
+    
+    ```bash
+    git push heroku main
+    ```
+
+#### 8.3 Monitor the Deployment
+
+-   You can monitor the deployment process using:
+   
+	```bash
+	Heroku logs --tail
+	```
+
+### 9. Git Workflow
+
+#### 9.1 Working on a New Feature or Bugfix
 
 1.  **Create a New Branch**:
     ```bash
@@ -134,14 +180,14 @@ celery -A bot.celery worker --loglevel=info
 	```
 4. **Create a Pull Request**: Submit a pull request through GitHub to merge your branch into `main`.
 
-#### 8.2 Keeping Your Branch Updated
+#### 9.2 Keeping Your Branch Updated
 
 Before submitting your pull request, ensure your branch is up-to-date with  `main`:
 ```bash
 git pull origin main
 ```
 
-### 9. Stopping Services
+### 10. Stopping Services
 
 Once you are done working:
 
