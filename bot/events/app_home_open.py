@@ -21,10 +21,8 @@ def handle_app_home_opened_event(event_data):
     # Check if the user has been welcomed
     if not bool(redis_client.get(session_key)):
         # Send welcome message
-        welcome_message = '''
-        Welcome to the MCIT Alumni Search Bot!
-        Please use the `/search-alumni` command followed by your query to find relevant alumni information.
-        '''
+        welcome_message = "Welcome to the MCIT Alumni Search Bot!\nPlease use the `/search-alumni` command followed by your query to find relevant alumni information."
+
         slack_client.chat_postMessage(channel=user_id, text=welcome_message)
 
         # Set the key in Redis to mark that the user has been welcomed
