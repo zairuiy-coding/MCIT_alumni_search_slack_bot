@@ -25,7 +25,7 @@ This bot integrates seamlessly with Slack using its API, employs OpenAI for adva
 
 ## 🏗️ Architecture Overview
 
-Below is a UML class diagram that provides an overview of the main components of the system and their interactions.
+Below is a UML Component Diagram that provides an overview of the main components of the system and their interactions.
 
 ![UML_MCIT_Slack_Bot](UML_MCIT_Slack_Bot.png)
 
