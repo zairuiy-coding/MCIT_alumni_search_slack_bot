@@ -1,4 +1,4 @@
-# DEVELOPMENT.md
+# Development Guidelines
 
 ## Setting Up Your Development Environment
 
