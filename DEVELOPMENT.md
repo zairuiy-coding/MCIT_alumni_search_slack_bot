@@ -154,7 +154,7 @@ Whenever you have updates to your code that you'd like to deploy to Heroku, foll
 -   Push your changes to the Heroku remote repository:
     
     ```bash
-    git push heroku your-branch-name
+    git push heroku main
     ```
 
 #### 8.3 Monitor the Deployment
