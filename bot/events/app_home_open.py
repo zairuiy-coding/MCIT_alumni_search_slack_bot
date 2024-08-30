@@ -23,7 +23,21 @@ def handle_app_home_opened_event(event_data):
         # Send welcome message
         welcome_message = "Welcome to the MCIT Alumni Search Bot!\nPlease use the `/search-alumni` command followed by your query to find relevant alumni information."
 
-        slack_client.chat_postMessage(channel=user_id, text=welcome_message)
+        # User Manual Image URL
+        image_url = "https://github.com/zairuiy-coding/MCIT_alumni_search_slack_bot/raw/main/user_manual.png"
+
+        # Send message with image
+        slack_client.chat_postMessage(
+            channel=user_id,
+            text=welcome_message,
+            attachments=[
+                {
+                    "fallback": "User Manual",
+                    "image_url": image_url,
+                    "alt_text": "User Manual"
+                }
+            ]
+        )
 
         # Set the key in Redis to mark that the user has been welcomed
         redis_client.set(session_key, "True", ex=Config.REDIS_EXPIRATION_TIME)
