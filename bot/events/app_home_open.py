@@ -21,21 +21,24 @@ def handle_app_home_opened_event(event_data):
     # Check if the user has been welcomed
     if not bool(redis_client.get(session_key)):
         # Send welcome message
-        welcome_message = """
-        Welcome to the MCIT Alumni Search Bot!
-
-        Getting Started:
-        * Use the `/search-alumni` command followed by your query to find relevant MCIT alumni information.
-        * Example: `/search-alumni Software Engineer` will return alumni who are Software Engineers.
-
-        Tips for Accurate Response:
-        - Use Specific Keywords
-        - Directly Refer to Existing Data Columns: Existing Columns in our database include Name, Email, LinkedIn URL, Company, Job Title, Location, Industry, Graduating Class, Last Updated. Directly referring to these columns will give you accurate results. If you ask questions about non-existing attributes, the bot may infer from existing information and make inaccurate assumptions.
-        - Avoid Quantity-Based Questions: For questions like "How many alumni work at Google?", the bot might not be able to provide an accurate number but can give an approximate answer.
-        - Avoid Repeatedly Asking the Same Question: Asking the same question multiple times in different ways might confuse the AI, leading to inconsistent or incorrect responses.
-
-        This bot is designed to make searching for MCIT alumni easy and efficient. If you have any feedback or encounter any issues, please reach out to the development team.
-        """
+        welcome_message = (
+            "*Welcome to the MCIT Alumni Search Bot!*\n\n"
+            "*Getting Started:*\n"
+            "• Use the `/search-alumni` command followed by your query to find relevant MCIT alumni information.\n"
+            "• Example: `/search-alumni Software Engineer` will return alumni who are Software Engineers.\n\n"
+            "*Tips for Accurate Response:*\n"
+            "• *Use Specific Keywords*\n"
+            "• *Directly Refer to Existing Data Columns:* Existing columns in our database include Name, Email, LinkedIn URL, "
+            "Company, Job Title, Location, Industry, Graduating Class, Last Updated. Directly referring to these columns will "
+            "give you accurate results. If you ask questions about non-existing attributes, the bot may infer from existing "
+            "information and make inaccurate assumptions.\n"
+            "• *Avoid Quantity-Based Questions:* For questions like 'How many alumni work at Google?', the bot might not be able "
+            "to provide an accurate number but can give an approximation.\n"
+            "• *Avoid Repeatedly Asking the Same Question:* Asking the same question multiple times in different ways might confuse "
+            "the AI, leading to inconsistent or incorrect responses.\n\n"
+            "This bot is designed to make searching for MCIT alumni easy and efficient. If you have any feedback or encounter any issues, "
+            "please reach out to the development team."
+        )
         
         slack_client.chat_postMessage(channel=user_id, text=welcome_message)
 
